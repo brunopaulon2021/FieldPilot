@@ -100,7 +100,7 @@ Destino definido: Vercel para a aplicação e Supabase para dados. Ainda não ex
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health check. O CI da branch confirmou instalação, lint, TypeScript, testes unitários e build no run `32361261612`. O gate final também instala Chromium e executa os fluxos Playwright em desktop e mobile.
+Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health check. O CI final confirmou dependências congeladas, lint, TypeScript, testes unitários, build e quatro testes Playwright em desktop/mobile no run `32361658301`, sobre o commit `5bb4591`.
 
 ## Problemas conhecidos
 
@@ -114,4 +114,4 @@ Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health
 
 ## Último commit/release
 
-Release preparada: `0.1.0`. CI da branch verde no run `32361261612`; atualizar com o SHA final de `main` e a URL após o primeiro deploy.
+Release preparada: `0.1.0`. Código validado no commit `5bb4591`, CI verde no run `32361658301`. O deploy ainda aguarda a ligação à Vercel; não existe URL de produção.
