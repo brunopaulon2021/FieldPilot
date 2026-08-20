@@ -90,7 +90,7 @@ Aguardam credenciais: Resend, OpenAI e Meta WhatsApp; nenhuma bloqueia a Fase 2.
 
 ## Banco
 
-Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` foi aplicada remotamente; o teste adversarial revelou e bloqueou uma divulgação indireta por unique violation. A correção `20260820172159_harden_customer_location_primary_scope.sql` também foi aplicada e toda a suíte de banco passou.
+Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. As migrations `20260820160931_customers_locations.sql` e `20260820172159_harden_customer_location_primary_scope.sql` também foram aplicadas e toda a suíte de banco passou. O smoke autenticado revelou que `INSERT ... RETURNING` de organização precisava permitir leitura pelo criador antes do trigger `AFTER INSERT`; a correção versionada está em `20260820173617_allow_organization_creator_returning.sql`.
 
 ## Segurança
 
