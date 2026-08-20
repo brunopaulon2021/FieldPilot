@@ -12,7 +12,7 @@ O blueprint integral recebido do produto está preservado em [MASTER_PROMPT.md](
 ## Stack atual
 
 - Next.js 16.3.1, App Router e Node.js runtime;
-- React 19.2.7 e TypeScript 7 strict;
+- React 19.2.8 e TypeScript 7 strict;
 - Tailwind CSS 4.3.3, convenções shadcn/ui e Lucide;
 - pnpm 11.22 e Node.js 24;
 - Vitest 4.1, Testing Library e Playwright 1.62;
