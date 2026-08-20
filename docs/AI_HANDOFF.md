@@ -56,17 +56,17 @@ Funciona agora:
 
 O projeto Supabase exclusivo do FieldPilot usa o ref `pbhjphqimvoffgdtwcer`. A migration remota, a matriz cross-tenant, o lint e os advisors passaram no GitHub Actions. As variáveis públicas estão configuradas na Vercel e a Site URL/allowlist de Auth foram confirmadas pela Management API. A release candidate está em produção; falta o smoke test com email real para confirmação e recuperação.
 
-## Implementação em validação
+## Implementação concluída para integração
 
-Release candidate 0.3.0: Customers + Customer Locations completa no código local, com lint, typecheck, 14 testes unitários e build de produção aprovados. A migration e a suíte SQL estão preparadas, mas ainda precisam de execução no Supabase remoto; commit, push, workflow de banco e deploy ainda não foram feitos.
+Release candidate 0.3.0: Customers + Customer Locations completa no código e no Supabase remoto. O CI `32397284781` aprovou lint, typecheck, 14 testes unitários, build e E2E. O workflow de banco `32397447479` aprovou dry-run, migrations, histórico, duas matrizes cross-tenant, lint, advisors e verificação de RLS.
 
 ## Próxima tarefa recomendada
 
-Publicar a branch de Customers + Customer Locations, executar a migration e a matriz SQL no projeto FieldPilot, validar advisors, integrar após CI e fazer o smoke test autenticado em produção.
+Integrar a PR `#12`, confirmar o deploy da Vercel e fazer o smoke test autenticado de Customers + Customer Locations em desktop e mobile.
 
 ## Backlog próximo
 
-1. publicar e testar Customers + Customer Locations em produção;
+1. testar Customers + Customer Locations em produção;
 2. Assets e QR;
 3. Service Requests;
 4. Work Orders;
@@ -90,7 +90,7 @@ Aguardam credenciais: Resend, OpenAI e Meta WhatsApp; nenhuma bloqueia a Fase 2.
 
 ## Banco
 
-Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` foi aplicada remotamente; o teste adversarial revelou e bloqueou uma divulgação indireta por unique violation. A correção está em `20260820172159_harden_customer_location_primary_scope.sql` e precisa passar pelo workflow de banco antes do merge.
+Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` foi aplicada remotamente; o teste adversarial revelou e bloqueou uma divulgação indireta por unique violation. A correção `20260820172159_harden_customer_location_primary_scope.sql` também foi aplicada e toda a suíte de banco passou.
 
 ## Segurança
 
@@ -109,7 +109,7 @@ Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A p
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: tema, schemas de Auth e Customers, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção das rotas `/app` e `/app/customers` e matrizes SQL cross-tenant. No slice local de Customers, typecheck, lint, 14 testes unitários e build passaram; o E2E local ficou bloqueado pela restrição de interfaces de rede do sandbox e deve ser executado no CI.
+Cobertura atual: tema, schemas de Auth e Customers, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção das rotas `/app` e `/app/customers` e matrizes SQL cross-tenant. Typecheck, lint, 14 testes unitários, build e E2E desktop/mobile passaram no CI; as duas matrizes SQL passaram no banco remoto.
 
 ## Problemas conhecidos
 
@@ -122,4 +122,4 @@ Cobertura atual: tema, schemas de Auth e Customers, geração de slug, proteçã
 
 ## Último commit/release
 
-Produção atual: commit `bc8e26d`, com a PR `#10` integrada. O CI `32381053997` e o workflow remoto de banco `32380098985` passaram. A release candidate `0.2.0` está publicada; a release final aguarda apenas o smoke test com email real.
+A release candidate `0.3.0` foi preparada na PR `#12`. O SHA `7f63a5f` passou no CI `32397284781` e no workflow remoto de banco `32397447479`; falta integrar, confirmar o deploy e concluir os smoke tests autenticados.
