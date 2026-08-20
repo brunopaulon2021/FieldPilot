@@ -90,7 +90,7 @@ Aguardam credenciais: Resend, OpenAI e Meta WhatsApp; nenhuma bloqueia a Fase 2.
 
 ## Banco
 
-Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` e o teste `supabase/tests/customers_locations_rls.sql` estão prontos localmente e ainda não foram aplicados remotamente.
+Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` foi aplicada remotamente; o teste adversarial revelou e bloqueou uma divulgação indireta por unique violation. A correção está em `20260820172159_harden_customer_location_primary_scope.sql` e precisa passar pelo workflow de banco antes do merge.
 
 ## Segurança
 

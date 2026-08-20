@@ -32,7 +32,8 @@ A criação de `organizations` exige `created_by = auth.uid()`. Um trigger `secu
 Migrations:
 
 - `supabase/migrations/20260820131835_auth_organizations.sql`;
-- `supabase/migrations/20260820160931_customers_locations.sql`.
+- `supabase/migrations/20260820160931_customers_locations.sql`;
+- `supabase/migrations/20260820172159_harden_customer_location_primary_scope.sql`.
 
 Clientes e locais usam uma foreign key composta por `customer_id` e `organization_id`, impedindo associações cross-tenant também ao nível relacional. Apenas Owner, Admin e Dispatcher podem escrever; Technician pode ler e Customer não recebe acesso geral. Não existe `DELETE` para o role `authenticated`: clientes são arquivados. Um índice parcial garante no máximo um local principal e um trigger mantém o primeiro local como principal.
 
