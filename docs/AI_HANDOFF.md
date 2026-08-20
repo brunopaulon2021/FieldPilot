@@ -1,7 +1,7 @@
 # AI Handoff
 
 Atualizado em: 2026-08-20
-Versão do produto: 0.2.0-rc.1
+Versão do produto: 0.3.0-rc.1
 
 ## Produto
 
@@ -48,21 +48,25 @@ Funciona agora:
 - onboarding que cria organização e Owner atomicamente;
 - painel protegido e fallback seguro quando as chaves ainda não estão configuradas;
 - migration com perfis, organizações, memberships, convites, RLS e grants explícitos;
+- carteira de clientes com pesquisa, criação, edição e arquivo reversível;
+- múltiplos locais por cliente com seleção consistente do local principal;
+- painel com contadores reais de clientes ativos e locais;
+- permissões de cliente/local por role, RLS, foreign key composta e ausência de `DELETE` para `authenticated`;
 - testes de validação, open redirect e isolamento cross-tenant.
 
 O projeto Supabase exclusivo do FieldPilot usa o ref `pbhjphqimvoffgdtwcer`. A migration remota, a matriz cross-tenant, o lint e os advisors passaram no GitHub Actions. As variáveis públicas estão configuradas na Vercel e a Site URL/allowlist de Auth foram confirmadas pela Management API. A release candidate está em produção; falta o smoke test com email real para confirmação e recuperação.
 
-## Última implementação concluída
+## Implementação em validação
 
-Release candidate 0.2.0: Auth + Organizations completa no código e no banco, publicada em produção e pendente apenas do smoke test com email real.
+Release candidate 0.3.0: Customers + Customer Locations completa no código local, com lint, typecheck, 14 testes unitários e build de produção aprovados. A migration e a suíte SQL estão preparadas, mas ainda precisam de execução no Supabase remoto; commit, push, workflow de banco e deploy ainda não foram feitos.
 
 ## Próxima tarefa recomendada
 
-Concluir o smoke test de confirmação/recuperação por email da Fase 2 e iniciar **Customers + Customer Locations**.
+Publicar a branch de Customers + Customer Locations, executar a migration e a matriz SQL no projeto FieldPilot, validar advisors, integrar após CI e fazer o smoke test autenticado em produção.
 
 ## Backlog próximo
 
-1. Customers + Customer Locations;
+1. publicar e testar Customers + Customer Locations em produção;
 2. Assets e QR;
 3. Service Requests;
 4. Work Orders;
@@ -86,7 +90,7 @@ Aguardam credenciais: Resend, OpenAI e Meta WhatsApp; nenhuma bloqueia a Fase 2.
 
 ## Banco
 
-Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. O teste SQL descartável em `supabase/tests/auth_organizations_rls.sql` passou contra o banco remoto.
+Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. A migration `20260820160931_customers_locations.sql` e o teste `supabase/tests/customers_locations_rls.sql` estão prontos localmente e ainda não foram aplicados remotamente.
 
 ## Segurança
 
@@ -105,7 +109,7 @@ Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A p
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: tema, schemas de Auth, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção de rota e matriz SQL cross-tenant. O CI `32380051858` passou e o workflow remoto de banco `32380098985` confirmou migration, isolamento, lint, advisors e RLS.
+Cobertura atual: tema, schemas de Auth e Customers, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção das rotas `/app` e `/app/customers` e matrizes SQL cross-tenant. No slice local de Customers, typecheck, lint, 14 testes unitários e build passaram; o E2E local ficou bloqueado pela restrição de interfaces de rede do sandbox e deve ser executado no CI.
 
 ## Problemas conhecidos
 

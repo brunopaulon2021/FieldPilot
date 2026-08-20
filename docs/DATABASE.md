@@ -4,12 +4,14 @@
 
 Supabase PostgreSQL. Migrations SQL versionadas no repositório serão a única forma de alterar schema de ambientes partilhados.
 
-## Schema implementado na Fase 2
+## Schema implementado
 
 - `profiles`: perfil de apresentação ligado 1:1 a `auth.users`;
 - `organizations`: tenant, slug, timezone e país;
 - `organization_members`: ligação entre utilizador, organização e role;
 - `invitations`: convites normalizados, expirados e armazenados apenas por hash;
+- `customers`: empresas e particulares de cada tenant, com arquivo reversível;
+- `customer_locations`: moradas operacionais ligadas ao cliente e ao mesmo tenant;
 - `private`: funções auxiliares de autorização e triggers, fora da Data API.
 
 A criação de `organizations` exige `created_by = auth.uid()`. Um trigger `security definer` cria imediatamente o membership `owner`, na mesma transação. Outro trigger impede eliminar ou despromover o último Owner.
@@ -27,7 +29,12 @@ A criação de `organizations` exige `created_by = auth.uid()`. Um trigger `secu
 - índices cobrem FKs, pesquisas de membership e convites pendentes;
 - novas tabelas são expostas por `GRANT` explícito, compatível com o default do Supabase de abril de 2026.
 
-Migration: `supabase/migrations/20260820131835_auth_organizations.sql`.
+Migrations:
+
+- `supabase/migrations/20260820131835_auth_organizations.sql`;
+- `supabase/migrations/20260820160931_customers_locations.sql`.
+
+Clientes e locais usam uma foreign key composta por `customer_id` e `organization_id`, impedindo associações cross-tenant também ao nível relacional. Apenas Owner, Admin e Dispatcher podem escrever; Technician pode ler e Customer não recebe acesso geral. Não existe `DELETE` para o role `authenticated`: clientes são arquivados. Um índice parcial garante no máximo um local principal e um trigger mantém o primeiro local como principal.
 
 ## Convenções
 
@@ -41,8 +48,9 @@ Migration: `supabase/migrations/20260820131835_auth_organizations.sql`.
 
 ## Domínios previstos
 
-SaaS: `profiles`, `organizations`, `organization_members`, `invitations`.
-Clientes: `customers`, `customer_contacts`, `customer_locations`.
+SaaS implementado: `profiles`, `organizations`, `organization_members`, `invitations`.
+Clientes implementado: `customers`, `customer_locations`.
+Clientes previsto: `customer_contacts`.
 Equipamentos: `assets`, `asset_categories`, `asset_documents`, `asset_qr_tokens`.
 Operação: `service_requests`, `work_orders`, `work_order_assignments`, `work_order_events`, `work_logs`.
 Outros: materiais, media, assinaturas, preventiva, orçamentos, comunicação, relatórios, audit, subscriptions, entitlements e usage.
@@ -58,4 +66,7 @@ Outros: materiais, media, assinaturas, preventiva, orçamentos, comunicação, r
 
 ## Validação
 
-`supabase/tests/auth_organizations_rls.sql` cria tenants A e B numa transação descartável e prova isolamento de `SELECT`, `INSERT`, `UPDATE` e `DELETE`, criação automática do Owner e proteção do último Owner.
+- `supabase/tests/auth_organizations_rls.sql` prova isolamento de Auth/Organizations, criação automática do Owner e proteção do último Owner;
+- `supabase/tests/customers_locations_rls.sql` prova isolamento de clientes e locais, permissões do Technician, ausência de `DELETE`, foreign key tenant-safe e troca atómica do local principal.
+
+Ambas as suítes criam tenants descartáveis e terminam com `ROLLBACK`.
