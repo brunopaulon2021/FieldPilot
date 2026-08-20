@@ -21,11 +21,10 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.FIELDPILOT_DATABASE_URL }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
         with:
           version: 2.114.0
-          github-token: ${{ github.token }}
       - name: Validate target project
         run: |
           node <<'NODE'
@@ -43,7 +42,7 @@ jobs:
       - name: Verify migration history
         run: supabase migration list --db-url "$DATABASE_URL"
       - name: Test tenant isolation
-        run: supabase db query --db-url "$DATABASE_URL" --file supabase/tests/auth_organizations_rls.sql
+        run: psql "$DATABASE_URL" --set ON_ERROR_STOP=1 --file supabase/tests/auth_organizations_rls.sql
       - name: Lint database
         run: supabase db lint --db-url "$DATABASE_URL" --schema public,private --level warning --fail-on error
       - name: Run database advisors
