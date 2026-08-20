@@ -50,15 +50,15 @@ Funciona agora:
 - migration com perfis, organizações, memberships, convites, RLS e grants explícitos;
 - testes de validação, open redirect e isolamento cross-tenant.
 
-O projeto Supabase exclusivo do FieldPilot usa o ref `pbhjphqimvoffgdtwcer`. A migration remota, a matriz cross-tenant, o lint e os advisors passaram no GitHub Actions. As variáveis públicas estão configuradas na Vercel; falta apenas o smoke test da aplicação após o merge.
+O projeto Supabase exclusivo do FieldPilot usa o ref `pbhjphqimvoffgdtwcer`. A migration remota, a matriz cross-tenant, o lint e os advisors passaram no GitHub Actions. As variáveis públicas estão configuradas na Vercel e a Site URL/allowlist de Auth foram confirmadas pela Management API. A release candidate está em produção; falta o smoke test com email real para confirmação e recuperação.
 
 ## Última implementação concluída
 
-Release candidate 0.2.0: Auth + Organizations completa no código e no banco, pendente apenas de smoke test remoto e publicação.
+Release candidate 0.2.0: Auth + Organizations completa no código e no banco, publicada em produção e pendente apenas do smoke test com email real.
 
 ## Próxima tarefa recomendada
 
-Concluir o smoke test da Fase 2 e iniciar **Customers + Customer Locations**.
+Concluir o smoke test de confirmação/recuperação por email da Fase 2 e iniciar **Customers + Customer Locations**.
 
 ## Backlog próximo
 
@@ -110,13 +110,12 @@ Cobertura atual: tema, schemas de Auth, geração de slug, proteção de redirec
 ## Problemas conhecidos
 
 - social preview ainda não tem imagem própria;
-- a Site URL e a allowlist de redirects do Supabase devem ser confirmadas no Dashboard antes de testar confirmação de email e recuperação.
+- confirmação de email e recuperação ainda precisam de um smoke test com caixa de correio real.
 
 ## Bloqueios
 
-- confirmação da Site URL e dos redirects autorizados no Supabase;
-- smoke test do fluxo real após o deploy da release candidate.
+- smoke test de cadastro, confirmação e recuperação com uma caixa de correio real.
 
 ## Último commit/release
 
-Produção atual: commit `d26472f`, CI verde no run `32364670544`. A release `0.2.0` ainda não foi publicada; esta branch deve ser integrada apenas depois do Supabase remoto, CI e smoke test completos.
+Produção atual: commit `bc8e26d`, com a PR `#10` integrada. O CI `32381053997` e o workflow remoto de banco `32380098985` passaram. A release candidate `0.2.0` está publicada; a release final aguarda apenas o smoke test com email real.
