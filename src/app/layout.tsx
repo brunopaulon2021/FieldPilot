@@ -5,8 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-display", display: "swap" });
 
+const appUrl = process.env.APP_URL?.trim() || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(appUrl),
   title: { default: "FieldPilot — Assistência técnica organizada", template: "%s | FieldPilot" },
   description: "Organize pedidos, técnicos, equipamentos e manutenções sem depender de WhatsApp, Excel e papel.",
   applicationName: "FieldPilot",
