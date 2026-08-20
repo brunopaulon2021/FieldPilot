@@ -39,3 +39,5 @@ Em regressão grave, promover imediatamente o último deployment saudável na Ve
 Produção ativa e pública: `https://field-pilot-brunopaulon2021s-projects.vercel.app/`.
 
 O deploy automático acompanha `main`. A Fase 2 usa exclusivamente o projeto Supabase FieldPilot `pbhjphqimvoffgdtwcer`; o projeto Supabase do Mandy's permanece separado e não pode ser reutilizado.
+
+A Site URL do Supabase aponta para a produção pública. A allowlist inclui os callbacks de onboarding e recuperação, os previews protegidos da equipa Vercel e `localhost:3000` para desenvolvimento.
