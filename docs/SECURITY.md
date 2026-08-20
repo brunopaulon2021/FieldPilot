@@ -35,7 +35,7 @@ Na Fase 2:
 
 ## Antes de produção
 
-Adicionar CSP baseada nos hosts do novo projeto Supabase, threat model, rate limiting adicional para convites, secret scan contínuo, política de retenção RGPD e audit log. Antes de ativar a Fase 2 em produção, aplicar a migration num projeto exclusivo, executar a suíte cross-tenant e rever os advisors de segurança/performance.
+Adicionar threat model, rate limiting adicional para convites, secret scan contínuo, política de retenção RGPD e audit log. A CSP permite apenas o host Supabase FieldPilot nas ligações externas. A migration remota, a suíte cross-tenant e os advisors de segurança/performance foram validados antes da ativação da Fase 2.
 
 ## Reporte responsável
 

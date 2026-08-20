@@ -17,7 +17,7 @@ O blueprint integral recebido do produto está preservado em [MASTER_PROMPT.md](
 - pnpm 11.22 e Node.js 24;
 - Vitest 4.1, Testing Library e Playwright 1.62;
 - GitHub Actions;
-- Supabase SSR integrado no código; Vercel de produção ligado; Resend, Meta WhatsApp e OpenAI continuam opcionais e não ligados.
+- Supabase FieldPilot provisionado, migration aplicada e SSR integrado; Vercel de produção ligado; Resend, Meta WhatsApp e OpenAI continuam opcionais e não ligados.
 
 ## Arquitetura
 
@@ -27,7 +27,7 @@ Detalhes em [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Estrutura do projeto
 
-  - `src/app`: landing, Auth, onboarding, painel, metadados e route handlers;
+- `src/app`: landing, Auth, onboarding, painel, metadados e route handlers;
 - `src/components`: componentes reutilizáveis;
 - `src/lib`: lógica pura e utilitários;
 - `tests/e2e`: fluxos Playwright;
@@ -50,15 +50,15 @@ Funciona agora:
 - migration com perfis, organizações, memberships, convites, RLS e grants explícitos;
 - testes de validação, open redirect e isolamento cross-tenant.
 
-O código da Fase 2 está validado localmente, mas a ativação completa aguarda criar um projeto Supabase exclusivo do FieldPilot, aplicar/testar a migration e configurar as chaves na Vercel.
+O projeto Supabase exclusivo do FieldPilot usa o ref `pbhjphqimvoffgdtwcer`. A migration remota, a matriz cross-tenant, o lint e os advisors passaram no GitHub Actions. As variáveis públicas estão configuradas na Vercel; falta apenas o smoke test da aplicação após o merge.
 
 ## Última implementação concluída
 
-Release candidate 0.2.0: Auth + Organizations completa no código, pendente de provisionamento e smoke test remoto.
+Release candidate 0.2.0: Auth + Organizations completa no código e no banco, pendente apenas de smoke test remoto e publicação.
 
 ## Próxima tarefa recomendada
 
-Provisionar o projeto Supabase FieldPilot, validar a Fase 2 remotamente e só então iniciar **Customers + Customer Locations**.
+Concluir o smoke test da Fase 2 e iniciar **Customers + Customer Locations**.
 
 ## Backlog próximo
 
@@ -80,22 +80,22 @@ Ver [DECISIONS.md](DECISIONS.md).
 
 ## Integrações
 
-Configurada: Vercel de produção, com produção pública e previews protegidos.
+Configuradas: Vercel de produção, com produção pública e previews protegidos, e Supabase exclusivo do FieldPilot com publishable key.
 Preparada: integração SSR do Supabase e variáveis documentadas em `.env.example`.
-Aguardam projeto/credenciais: Supabase exclusivo do FieldPilot, Resend, OpenAI e Meta WhatsApp. Apenas Supabase bloqueia a ativação da Fase 2.
+Aguardam credenciais: Resend, OpenAI e Meta WhatsApp; nenhuma bloqueia a Fase 2.
 
 ## Banco
 
-Migration criada em `supabase/migrations/20260820131835_auth_organizations.sql` com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. O teste SQL descartável está em `supabase/tests/auth_organizations_rls.sql`.
+Migration `20260820131835_auth_organizations.sql` aplicada no projeto FieldPilot com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. O teste SQL descartável em `supabase/tests/auth_organizations_rls.sql` passou contra o banco remoto.
 
 ## Segurança
 
-Implementado: headers básicos, SSR com `getClaims`, validação Zod server-side, redirects locais, RLS multi-tenant, schema privado e permissions mínimas no workflow.
-Próximo: advisors remotos, CSP baseada no host Supabase efetivo, rate limiting de convites e audit log.
+Implementado: CSP limitada ao host Supabase FieldPilot, SSR com `getClaims`, validação Zod server-side, redirects locais, RLS multi-tenant, schema privado e permissions mínimas no workflow.
+Próximo: rate limiting de convites e audit log.
 
 ## Deploy
 
-Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A produção é pública e os previews protegidos. Falta o projeto Supabase exclusivo e a configuração das variáveis da Fase 2. Consulte [DEPLOYMENT.md](DEPLOYMENT.md).
+Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A produção é pública, os previews protegidos e as variáveis públicas do Supabase FieldPilot estão configuradas. Consulte [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Testes
 
@@ -105,17 +105,17 @@ Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A p
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: tema, schemas de Auth, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção de rota e matriz SQL cross-tenant. Localmente passaram lint, TypeScript, 10 testes unitários e build; Playwright aguarda o navegador do CI e a suíte SQL aguarda o projeto Supabase.
+Cobertura atual: tema, schemas de Auth, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção de rota e matriz SQL cross-tenant. O CI `32380051858` passou e o workflow remoto de banco `32380098985` confirmou migration, isolamento, lint, advisors e RLS.
 
 ## Problemas conhecidos
 
 - social preview ainda não tem imagem própria;
-- CSP será adicionada quando hosts de Supabase/Vercel estiverem definidos.
+- a Site URL e a allowlist de redirects do Supabase devem ser confirmadas no Dashboard antes de testar confirmação de email e recuperação.
 
 ## Bloqueios
 
-- criação de um projeto Supabase separado (ação com custo e confirmação do owner);
-- aplicação/teste remoto da migration e configuração das chaves na Vercel.
+- confirmação da Site URL e dos redirects autorizados no Supabase;
+- smoke test do fluxo real após o deploy da release candidate.
 
 ## Último commit/release
 

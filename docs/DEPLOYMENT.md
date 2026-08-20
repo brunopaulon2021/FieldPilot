@@ -38,4 +38,4 @@ Em regressão grave, promover imediatamente o último deployment saudável na Ve
 
 Produção ativa e pública: `https://field-pilot-brunopaulon2021s-projects.vercel.app/`.
 
-O deploy automático acompanha `main`. A Fase 2 ainda exige um projeto Supabase novo e exclusivo; o projeto Supabase já existente na conta pertence ao Mandy's e não pode ser reutilizado.
+O deploy automático acompanha `main`. A Fase 2 usa exclusivamente o projeto Supabase FieldPilot `pbhjphqimvoffgdtwcer`; o projeto Supabase do Mandy's permanece separado e não pode ser reutilizado.

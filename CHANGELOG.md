@@ -12,11 +12,13 @@ Este projeto segue [Semantic Versioning](https://semver.org/).
 - tabelas `profiles`, `organizations`, `organization_members` e `invitations`;
 - RLS e privilégios explícitos para leitura e escrita isoladas por tenant;
 - testes unitários de validação/redirecionamento e suíte SQL cross-tenant;
+- workflow protegido para aplicar migrations, testar RLS e executar lint/advisors remotos;
 
 ### Changed
 
 - landing pública agora conduz para cadastro e início de sessão reais;
 - configuração pública do Supabase usa publishable key em vez da legacy anon key.
+- CSP limita ligações externas ao projeto Supabase exclusivo do FieldPilot.
 
 ## [0.1.0] - 2026-08-20
 
