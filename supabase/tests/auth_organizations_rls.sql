@@ -22,7 +22,8 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000001', true);
 
 insert into public.organizations (id, name, slug, created_by)
-values ('a0000000-0000-0000-0000-000000000001', 'Empresa A', 'empresa-a', '10000000-0000-0000-0000-000000000001');
+values ('a0000000-0000-0000-0000-000000000001', 'Empresa A', 'empresa-a', '10000000-0000-0000-0000-000000000001')
+returning id;
 
 do $$
 begin

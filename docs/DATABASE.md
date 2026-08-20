@@ -16,6 +16,8 @@ Supabase PostgreSQL. Migrations SQL versionadas no repositório serão a única 
 
 A criação de `organizations` exige `created_by = auth.uid()`. Um trigger `security definer` cria imediatamente o membership `owner`, na mesma transação. Outro trigger impede eliminar ou despromover o último Owner.
 
+A policy de leitura também reconhece o criador durante `INSERT ... RETURNING`. Isso cobre o intervalo anterior ao trigger `AFTER INSERT` criar o membership Owner sem ampliar acesso a terceiros, porque `created_by` é validado no insert e depois permanece imutável.
+
 ## Roles
 
 `owner`, `admin`, `dispatcher`, `technician` e `customer`. Roles ficam em `organization_members`; metadata editável do Auth nunca participa da autorização.
@@ -33,7 +35,8 @@ Migrations:
 
 - `supabase/migrations/20260820131835_auth_organizations.sql`;
 - `supabase/migrations/20260820160931_customers_locations.sql`;
-- `supabase/migrations/20260820172159_harden_customer_location_primary_scope.sql`.
+- `supabase/migrations/20260820172159_harden_customer_location_primary_scope.sql`;
+- `supabase/migrations/20260820173617_allow_organization_creator_returning.sql`.
 
 Clientes e locais usam uma foreign key composta por `customer_id` e `organization_id`, impedindo associações cross-tenant também ao nível relacional. Apenas Owner, Admin e Dispatcher podem escrever; Technician pode ler e Customer não recebe acesso geral. Não existe `DELETE` para o role `authenticated`: clientes são arquivados. Um índice parcial garante no máximo um local principal e um trigger mantém o primeiro local como principal.
 
