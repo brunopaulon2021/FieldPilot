@@ -10,7 +10,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  experimental: { typedRoutes: true },
+  typedRoutes: true,
+  allowedDevOrigins: ["127.0.0.1"],
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
