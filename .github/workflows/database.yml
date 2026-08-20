@@ -1,0 +1,52 @@
+name: Database migration
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fieldpilot-production-database
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'apply-database'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: ${{ secrets.FIELDPILOT_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
+        with:
+          version: 2.114.0
+      - name: Validate target project
+        run: |
+          node <<'NODE'
+          const url = new URL(process.env.DATABASE_URL)
+          const projectRef = url.username.split('.')[1]
+          if (projectRef !== 'pbhjphqimvoffgdtwcer') {
+            throw new Error(`Refusing database target: ${projectRef || 'unknown'}`)
+          }
+          console.log(`Validated project ref: ${projectRef}`)
+          NODE
+      - name: Preview migrations
+        run: supabase db push --db-url "$DATABASE_URL" --include-all --dry-run
+      - name: Apply migrations
+        run: supabase db push --db-url "$DATABASE_URL" --include-all
+      - name: Verify migration history
+        run: supabase migration list --db-url "$DATABASE_URL"
+      - name: Test tenant isolation
+        run: psql "$DATABASE_URL" --set ON_ERROR_STOP=1 --file supabase/tests/auth_organizations_rls.sql
+      - name: Lint database
+        run: supabase db lint --db-url "$DATABASE_URL" --schema public,private --level warning --fail-on error
+      - name: Run database advisors
+        run: supabase db advisors --db-url "$DATABASE_URL" --type all --level info --fail-on error
+      - name: Verify public RLS
+        run: |
+          supabase db query --db-url "$DATABASE_URL" "select relname as table_name, relrowsecurity as rls_enabled from pg_class join pg_namespace on pg_namespace.oid = pg_class.relnamespace where nspname = 'public' and relkind = 'r' order by relname;"

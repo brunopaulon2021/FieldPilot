@@ -20,7 +20,7 @@ export default function Home() {
         <nav className="desktop-nav" aria-label="Navegação principal">
           <a href="#produto">Produto</a><a href="#fluxo">Como funciona</a><a href="#seguranca">Segurança</a>
         </nav>
-        <div className="header-actions"><ThemeToggle /><a className="button button-small" href="#contacto">Acompanhar lançamento</a></div>
+        <div className="header-actions"><ThemeToggle /><a className="text-link login-link" href="/login">Entrar</a><a className="button button-small" href="/signup">Criar conta</a></div>
       </header>
 
       <section className="hero" id="inicio">
@@ -29,7 +29,7 @@ export default function Home() {
           <h1>Da chamada do cliente ao relatório final.</h1>
           <p className="hero-lead">Organize pedidos, técnicos, equipamentos e manutenções sem depender de WhatsApp, Excel e papel.</p>
           <div className="hero-actions">
-            <a className="button" href="#produto">Conhecer o FieldPilot <ArrowRight size={17} /></a>
+            <a className="button" href="/signup">Começar agora <ArrowRight size={17} /></a>
             <a className="text-link" href="#fluxo">Ver o fluxo completo</a>
           </div>
           <ul className="proof-list" aria-label="Benefícios principais">
@@ -77,7 +77,7 @@ export default function Home() {
 
       <section className="cta-section" id="contacto">
         <div><span>EM DESENVOLVIMENTO</span><h2>Um produto simples de adotar. Difícil de quebrar.</h2><p>O FieldPilot está a ser construído em entregas utilizáveis, com foco em empresas portuguesas de assistência técnica.</p></div>
-        <a className="button button-light" href="https://github.com/brunopaulon2021/FieldPilot">Acompanhar no GitHub <ArrowRight size={17} /></a>
+        <a className="button button-light" href="/signup">Criar a minha conta <ArrowRight size={17} /></a>
       </section>
 
       <footer><a className="brand" href="#inicio"><span className="brand-mark"><MapPin size={17} /></span>FieldPilot</a><p>Operações de campo, sem ruído.</p><span>© {new Date().getFullYear()} FieldPilot</span></footer>
