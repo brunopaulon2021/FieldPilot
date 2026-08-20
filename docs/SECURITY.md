@@ -33,6 +33,16 @@ Na Fase 2:
 - role obtida apenas de `organization_members`, nunca de `user_metadata`;
 - palavra-passe mínima de 12 caracteres e confirmação de email habilitada na configuração local.
 
+No slice de Customers + Customer Locations:
+
+- tenant e utilizador são sempre derivados da sessão verificada no servidor;
+- Owner, Admin e Dispatcher podem escrever; Technician tem apenas leitura; Customer não enumera a carteira;
+- RLS e uma foreign key composta impedem leitura, alteração e associação cross-tenant;
+- `created_by` e identidade do tenant são imutáveis por triggers;
+- formulários são validados com Zod e não aceitam `organization_id`, role ou actor;
+- `authenticated` não recebe privilégio SQL de `DELETE`; o fluxo usa arquivo reversível;
+- erros apresentados ao utilizador não incluem mensagens internas do PostgreSQL ou Supabase.
+
 ## Antes de produção
 
 Adicionar threat model, rate limiting adicional para convites, secret scan contínuo, política de retenção RGPD e audit log. A CSP permite apenas o host Supabase FieldPilot nas ligações externas. A migration remota, a suíte cross-tenant e os advisors de segurança/performance foram validados antes da ativação da Fase 2.

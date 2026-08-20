@@ -24,6 +24,12 @@ test("redirects protected routes when authentication is not configured", async (
   await expect(page.getByRole("alert")).toContainText("autenticação ainda está a ser configurada");
 });
 
+test("protects the customer workspace when authentication is not configured", async ({ page }) => {
+  await page.goto("/app/customers");
+  await expect(page).toHaveURL(/\/login\?error=configuration$/);
+  await expect(page.getByRole("alert")).toContainText("autenticação ainda está a ser configurada");
+});
+
 test("health endpoint is available", async ({ request }) => {
   const response = await request.get("/api/health");
   expect(response.ok()).toBeTruthy();

@@ -2,6 +2,23 @@
 
 Este projeto segue [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - Unreleased
+
+### Added
+
+- carteira de clientes com pesquisa, criação, edição e arquivo reversível;
+- múltiplos locais por cliente, promoção automática do primeiro local e troca do local principal;
+- painel protegido com contadores reais de clientes ativos e locais;
+- migration tenant-safe para `customers` e `customer_locations`, com grants mínimos, RLS, constraints e índices;
+- suíte SQL adversarial para isolamento cross-tenant e testes unitários de validação;
+- navegação responsiva da área de trabalho e estados vazios, de erro e permissão.
+
+### Security
+
+- tenant, actor e capabilities são derivados exclusivamente da sessão verificada;
+- foreign key composta bloqueia associações de locais a clientes de outro tenant;
+- role `authenticated` não recebe `DELETE` nas novas tabelas.
+
 ## [0.2.0] - Unreleased
 
 ### Added

@@ -4,7 +4,7 @@ FieldPilot é um SaaS B2B para empresas de assistência técnica com equipas no 
 
 ## Estado
 
-O projeto está na **Fase 2 — Autenticação e Organizações**. A fundação pública está em produção e a aplicação já inclui cadastro, confirmação de email, login, recuperação de acesso, onboarding da empresa e área protegida com isolamento multi-tenant.
+O projeto está na primeira vertical operacional depois de **Autenticação e Organizações**. A aplicação inclui cadastro, confirmação de email, login, recuperação de acesso, onboarding da empresa, área protegida e gestão tenant-safe de clientes e respetivos locais.
 
 ## Stack
 
