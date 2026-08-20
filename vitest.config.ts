@@ -1,6 +1,5 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
-import path from "node:path";
 
 export default defineConfig({
   plugins: [react()],
@@ -11,5 +10,5 @@ export default defineConfig({
     exclude: ["tests/e2e/**", "node_modules/**", ".next/**"],
     coverage: { provider: "v8", reporter: ["text", "json", "html"] },
   },
-  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
+  resolve: { alias: { "@": `${import.meta.dirname}/src` } },
 });

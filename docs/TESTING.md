@@ -22,6 +22,15 @@ pnpm test:e2e
 
 Cada vertical slice persistente deve criar Organization A e B e provar que A não lê, altera, elimina, enumera nem obtém URLs de storage de B.
 
+A Fase 2 inclui `supabase/tests/auth_organizations_rls.sql`. Depois de iniciar o Supabase local:
+
+```bash
+supabase db reset
+supabase test db supabase/tests/auth_organizations_rls.sql
+```
+
+No projeto remoto, executar a mesma matriz numa transação descartável e consultar os advisors de segurança e performance antes do deploy.
+
 ## Definition of Done
 
 Fluxo feliz, erros, loading/empty states, permissões, mobile, acessibilidade, logs e documentação testados. Não perseguir percentagem de coverage sem valor; toda regra crítica precisa de teste comportamental.

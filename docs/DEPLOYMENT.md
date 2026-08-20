@@ -18,6 +18,14 @@ Branch curta → CI → revisão → merge em `main` → deploy automático → 
 - Node.js: 24;
 - variáveis conforme `.env.example`, separadas por ambiente.
 
+Variáveis necessárias para Auth:
+
+- `APP_URL`: URL canónica do ambiente;
+- `NEXT_PUBLIC_SUPABASE_URL`: URL do projeto exclusivo FieldPilot;
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: publishable key pública.
+
+Os previews permanecem protegidos. A produção é pública por decisão do owner. As migrations são aplicadas no Supabase antes de promover o frontend que depende delas.
+
 ## Smoke test
 
 Após cada deploy: abrir produção, validar o fluxo alterado, mobile quando relevante, console, requests e `/api/health`. Deploy concluído não equivale a feature concluída.
@@ -28,4 +36,6 @@ Em regressão grave, promover imediatamente o último deployment saudável na Ve
 
 ## Estado
 
-Ainda não existe projeto Vercel ligado. Não há URL de produção a validar.
+Produção ativa e pública: `https://field-pilot-brunopaulon2021s-projects.vercel.app/`.
+
+O deploy automático acompanha `main`. A Fase 2 ainda exige um projeto Supabase novo e exclusivo; o projeto Supabase já existente na conta pertence ao Mandy's e não pode ser reutilizado.

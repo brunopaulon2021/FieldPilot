@@ -1,7 +1,7 @@
 # AI Handoff
 
 Atualizado em: 2026-08-20
-Versão do produto: 0.1.0
+Versão do produto: 0.2.0-rc.1
 
 ## Produto
 
@@ -17,7 +17,7 @@ O blueprint integral recebido do produto está preservado em [MASTER_PROMPT.md](
 - pnpm 11.22 e Node.js 24;
 - Vitest 4.1, Testing Library e Playwright 1.62;
 - GitHub Actions;
-- Supabase, Vercel, Resend, Meta WhatsApp e OpenAI são providers decididos, ainda não ligados.
+- Supabase SSR integrado no código; Vercel de produção ligado; Resend, Meta WhatsApp e OpenAI continuam opcionais e não ligados.
 
 ## Arquitetura
 
@@ -27,7 +27,7 @@ Detalhes em [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Estrutura do projeto
 
-- `src/app`: rotas, layout, metadados e route handlers;
+  - `src/app`: landing, Auth, onboarding, painel, metadados e route handlers;
 - `src/components`: componentes reutilizáveis;
 - `src/lib`: lógica pura e utilitários;
 - `tests/e2e`: fluxos Playwright;
@@ -44,24 +44,29 @@ Funciona agora:
 - visualização realista do futuro painel operacional;
 - metadados, manifest e health endpoint;
 - base de testes e CI definidas.
+- cadastro, confirmação de email, login, logout e recuperação de acesso;
+- onboarding que cria organização e Owner atomicamente;
+- painel protegido e fallback seguro quando as chaves ainda não estão configuradas;
+- migration com perfis, organizações, memberships, convites, RLS e grants explícitos;
+- testes de validação, open redirect e isolamento cross-tenant.
 
-Ainda não existe autenticação, base Supabase nem dados persistidos; esses itens pertencem à próxima vertical slice e não são apresentados como funcionais.
+O código da Fase 2 está validado localmente, mas a ativação completa aguarda criar um projeto Supabase exclusivo do FieldPilot, aplicar/testar a migration e configurar as chaves na Vercel.
 
 ## Última implementação concluída
 
-Release 0.1.0: fundação técnica, visual, testes, CI, documentação e shell comercial.
+Release candidate 0.2.0: Auth + Organizations completa no código, pendente de provisionamento e smoke test remoto.
 
 ## Próxima tarefa recomendada
 
-Implementar **Auth + Organizations** como slice completa: projeto Supabase, migrations, RLS, signup/login/logout/recovery, criação de organização, membership Owner, onboarding mínimo, testes cross-tenant e deploy.
+Provisionar o projeto Supabase FieldPilot, validar a Fase 2 remotamente e só então iniciar **Customers + Customer Locations**.
 
 ## Backlog próximo
 
-1. Auth + Organizations;
-2. Customers;
-3. Customer Locations;
-4. Assets e QR;
-5. Service Requests.
+1. Customers + Customer Locations;
+2. Assets e QR;
+3. Service Requests;
+4. Work Orders;
+5. Agenda operacional.
 
 ## Decisões importantes
 
@@ -75,22 +80,22 @@ Ver [DECISIONS.md](DECISIONS.md).
 
 ## Integrações
 
-Configuradas: nenhuma integração externa com credenciais.
-Preparadas: variáveis documentadas em `.env.example`.
-Aguardam credenciais: Supabase, Vercel, Resend, OpenAI e Meta WhatsApp. OpenAI e WhatsApp não bloqueiam o core.
+Configurada: Vercel de produção, com produção pública e previews protegidos.
+Preparada: integração SSR do Supabase e variáveis documentadas em `.env.example`.
+Aguardam projeto/credenciais: Supabase exclusivo do FieldPilot, Resend, OpenAI e Meta WhatsApp. Apenas Supabase bloqueia a ativação da Fase 2.
 
 ## Banco
 
-Nenhuma migration criada porque a slice de Auth + Organizations ainda não começou. O modelo e as regras estão descritos em [DATABASE.md](DATABASE.md). A primeira migration deve criar `profiles`, `organizations`, `organization_members` e `invitations` com RLS e testes de isolamento.
+Migration criada em `supabase/migrations/20260820131835_auth_organizations.sql` com `profiles`, `organizations`, `organization_members`, `invitations`, triggers, índices, grants e policies. O teste SQL descartável está em `supabase/tests/auth_organizations_rls.sql`.
 
 ## Segurança
 
-Implementado: headers básicos, variáveis server-only separadas, nenhuma secret no código e permissions mínimas no workflow.
-Próximo: Content Security Policy baseada nos hosts efetivos, RLS, validação Zod server-side, rate limiting e audit log.
+Implementado: headers básicos, SSR com `getClaims`, validação Zod server-side, redirects locais, RLS multi-tenant, schema privado e permissions mínimas no workflow.
+Próximo: advisors remotos, CSP baseada no host Supabase efetivo, rate limiting de convites e audit log.
 
 ## Deploy
 
-Destino definido: Vercel para a aplicação e Supabase para dados. Ainda não existe projeto Vercel ligado nem URL de produção. Consulte [DEPLOYMENT.md](DEPLOYMENT.md).
+Vercel ativa em `https://field-pilot-brunopaulon2021s-projects.vercel.app/`. A produção é pública e os previews protegidos. Falta o projeto Supabase exclusivo e a configuração das variáveis da Fase 2. Consulte [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Testes
 
@@ -100,7 +105,7 @@ Destino definido: Vercel para a aplicação e Supabase para dados. Ainda não ex
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health check. O CI final confirmou dependências congeladas, lint, TypeScript, testes unitários, build e quatro testes Playwright em desktop/mobile no run `32361658301`, sobre o commit `5bb4591`.
+Cobertura atual: tema, schemas de Auth, geração de slug, proteção de redirects, landing, páginas públicas de Auth, proteção de rota e matriz SQL cross-tenant. Localmente passaram lint, TypeScript, 10 testes unitários e build; Playwright aguarda o navegador do CI e a suíte SQL aguarda o projeto Supabase.
 
 ## Problemas conhecidos
 
@@ -109,9 +114,9 @@ Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health
 
 ## Bloqueios
 
-- credenciais/projeto Supabase para a Fase 2;
-- ligação à Vercel para deploy de produção.
+- criação de um projeto Supabase separado (ação com custo e confirmação do owner);
+- aplicação/teste remoto da migration e configuração das chaves na Vercel.
 
 ## Último commit/release
 
-Release preparada: `0.1.0`. Código validado no commit `5bb4591`, CI verde no run `32361658301`. O deploy ainda aguarda a ligação à Vercel; não existe URL de produção.
+Produção atual: commit `d26472f`, CI verde no run `32364670544`. A release `0.2.0` ainda não foi publicada; esta branch deve ser integrada apenas depois do Supabase remoto, CI e smoke test completos.
