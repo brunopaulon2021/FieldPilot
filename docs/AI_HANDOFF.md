@@ -100,11 +100,10 @@ Destino definido: Vercel para a aplicação e Supabase para dados. Ainda não ex
 - `pnpm build`
 - `pnpm test:e2e`
 
-Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health check. O ambiente desta implementação não conseguiu aceder ao registry npm, portanto a validação executável deve ser confirmada pelo CI após o primeiro push.
+Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health check. O CI da branch confirmou instalação, lint, TypeScript, testes unitários e build no run `32361261612`. O gate final também instala Chromium e executa os fluxos Playwright em desktop e mobile.
 
 ## Problemas conhecidos
 
-- lockfile ainda não foi gerado porque o registry npm não estava acessível no ambiente de criação;
 - social preview ainda não tem imagem própria;
 - CSP será adicionada quando hosts de Supabase/Vercel estiverem definidos.
 
@@ -115,4 +114,4 @@ Cobertura atual: lógica de tema; E2E da proposta de valor, navegação e health
 
 ## Último commit/release
 
-Release preparada: `0.1.0`. Atualizar esta secção com SHA, resultado do CI e URL depois da publicação.
+Release preparada: `0.1.0`. CI da branch verde no run `32361261612`; atualizar com o SHA final de `main` e a URL após o primeiro deploy.
