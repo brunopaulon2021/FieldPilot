@@ -22,7 +22,7 @@ jobs:
       DATABASE_URL: ${{ secrets.FIELDPILOT_DATABASE_URL }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
+      - uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13
         with:
           version: 2.114.0
       - name: Validate target project
